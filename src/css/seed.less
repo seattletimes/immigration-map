@@ -100,9 +100,28 @@ div.leaflet-popup-content{
 }
 
 div.leaflet-popup-content-wrapper {
-  border-radius:3px;
-  max-width:240px;
+  border-radius: 3px;
+  max-width: 240px;
   box-shadow: 0 1px 14px rgba(0,0,0,0.30);
-  padding-left:10px;
-  padding-right:10px;
+  padding: 4px 20px;
+}
+
+.popuptext {
+  text-align: center;
+}
+.country-label {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.overall {
+  &:before {
+    margin-right: 5px;
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f0ac";
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: antialiased;
+    font-size: inherit;
+  }
 }

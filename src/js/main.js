@@ -60,15 +60,15 @@ function getColor(d) {
            d > 30 ? '#756bb1' :
            d > 20 ? '#9e9ac8' :
            d > 10  ? '#bcbddc' :
-           d > 5  ? '#dadaeb' :
+           d > 0  ? '#dadaeb' :
                      '#f2f0f7' ;
   } else {
     return d > 500 ? '#08519c' :
-           d > 250 ? '#3182bd' :
+           d > 200 ? '#3182bd' :
            d > 100 ? '#6baed6' :
-           d > 50  ? '#9ecae1' :
-           d > 20  ? '#c6dbef' :
-                     '#eff3ff' ;
+           d > 50  ? '#bdd7e7' :
+           d > 0  ? '#eff3ff' :
+                     'white' ;
   }
 }
 
@@ -94,5 +94,6 @@ Array.prototype.slice.call(document.querySelectorAll('.tab')).forEach(function(t
     country = tab.innerHTML;
     countryLookup = country == "Overall" ? "PercentForeignBorn" : tab.innerHTML.replace(" ", "");
     geojson.setStyle(style);
+    map.closePopup();
   })
 });
