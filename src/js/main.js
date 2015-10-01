@@ -11,7 +11,7 @@ var mapElement = document.querySelector("leaflet-map");
 var L = mapElement.leaflet;
 var map = mapElement.map;
 
-var country = "Japan";
+var country = "CentralAmerica";
 
 var onEachFeature = function(feature, layer) {
 };
@@ -26,12 +26,13 @@ function getColor(d) {
 }
 
 function style(feature) {
+  console.log(feature.properties)
   return {
     fillColor: getColor(feature.properties[country]),
     weight: 0.5,
     opacity: 1,
     color: 'white',
-    fillOpacity: .8
+    fillOpacity: .5
   };
 }
 
@@ -44,7 +45,8 @@ Array.prototype.slice.call(document.querySelectorAll('.tab')).forEach(function(t
   tab.addEventListener("click", function() {
     if (document.querySelector(".selected")) document.querySelector(".selected").classList.remove("selected");
     tab.classList.add("selected");
-    country = tab.innerHTML;
+    country = tab.innerHTML.replace(" ", "");
+    console.log(country)
     geojson.setStyle(style);
   })
 });
