@@ -5,34 +5,80 @@
 require("component-responsive-frame/child");
 require("component-leaflet-map");
 
+var ich = require("icanhaz");
 var data = require("./foreignBorn.geo.json");
+
+var countryLookup = "PercentForeignBorn";
+var country = "Overall";
 
 var mapElement = document.querySelector("leaflet-map");
 var L = mapElement.leaflet;
 var map = mapElement.map;
 
-var country = "CentralAmerica";
+map.scrollWheelZoom.disable();
+
+var focused = false;
+
+var popupTemplate = require("./_popupTemplate.html");
+ich.addTemplate("popupTemplate", popupTemplate);
 
 var onEachFeature = function(feature, layer) {
+  layer.bindPopup(ich.popupTemplate({
+    country: country,
+    number: feature.properties[countryLookup]
+  }));
+  layer.on({
+    popupopen: function(e) {
+      e.popup.setContent(ich.popupTemplate({
+        country: country,
+        number: feature.properties[countryLookup]
+      }));
+      focused = layer;
+      layer.setStyle({ weight: 2, fillOpacity: 1, color: '#e08214'});
+    },
+    mouseover: function(e) {
+      layer.setStyle({ weight: 2, fillOpacity: 1, color: '#e08214' });
+    },
+    mouseout: function(e) {
+      if (focused && focused == layer) { return }
+      layer.setStyle({ weight: 0.5, fillOpacity: 0.5, color: 'white' });
+    }
+  });
 };
 
+map.on("popupclose", function() {
+  if (focused) {
+    focused.setStyle({ weight: 0.5, fillOpacity: 0.5, color: 'white' });
+    focused = false;
+  }
+});
+
 function getColor(d) {
-  return d > 500 ? '#54278f' :
-         d > 250 ? '#756bb1' :
-         d > 100 ? '#9e9ac8' :
-         d > 50  ? '#bcbddc' :
-         d > 20  ? '#dadaeb' :
-                   '#f2f0f7' ;
+  if (countryLookup == "PercentForeignBorn") {
+    d = d.slice(0, -1);
+    return d > 40 ? '#54278f' :
+           d > 30 ? '#756bb1' :
+           d > 20 ? '#9e9ac8' :
+           d > 10  ? '#bcbddc' :
+           d > 5  ? '#dadaeb' :
+                     '#f2f0f7' ;
+  } else {
+    return d > 500 ? '#08519c' :
+           d > 250 ? '#3182bd' :
+           d > 100 ? '#6baed6' :
+           d > 50  ? '#9ecae1' :
+           d > 20  ? '#c6dbef' :
+                     '#eff3ff' ;
+  }
 }
 
 function style(feature) {
-  console.log(feature.properties)
   return {
-    fillColor: getColor(feature.properties[country]),
+    fillColor: getColor(feature.properties[countryLookup]),
     weight: 0.5,
     opacity: 1,
     color: 'white',
-    fillOpacity: .5
+    fillOpacity: 0.5
   };
 }
 
@@ -45,8 +91,8 @@ Array.prototype.slice.call(document.querySelectorAll('.tab')).forEach(function(t
   tab.addEventListener("click", function() {
     if (document.querySelector(".selected")) document.querySelector(".selected").classList.remove("selected");
     tab.classList.add("selected");
-    country = tab.innerHTML.replace(" ", "");
-    console.log(country)
+    country = tab.innerHTML;
+    countryLookup = country == "Overall" ? "PercentForeignBorn" : tab.innerHTML.replace(" ", "");
     geojson.setStyle(style);
   })
 });
