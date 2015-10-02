@@ -31,7 +31,8 @@ var onEachFeature = function(feature, layer) {
     popupopen: function(e) {
       e.popup.setContent(ich.popupTemplate({
         country: country,
-        number: feature.properties[countryLookup]
+        number: commafy(feature.properties[countryLookup]),
+        s: feature.properties[countryLookup] == 1 ? "": "s"
       }));
       focused = layer;
       layer.setStyle({ weight: 2, fillOpacity: 1, color: '#e08214'});
@@ -53,21 +54,28 @@ map.on("popupclose", function() {
   }
 });
 
+function commafy( num ) {
+  console.log(num)
+  if (num.length >= 4) {
+    num = num.replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+  }
+  return num;
+}
+
 function getColor(d) {
   if (countryLookup == "PercentForeignBorn") {
     d = d.slice(0, -1);
-    return d > 40 ? '#54278f' :
-           d > 30 ? '#756bb1' :
-           d > 20 ? '#9e9ac8' :
-           d > 10  ? '#bcbddc' :
-           d > 0  ? '#dadaeb' :
-                     '#f2f0f7' ;
+    return d >= 40 ? '#08519c' :
+           d >= 30 ? '#3182bd' :
+           d >= 20 ? '#6baed6' :
+           d >= 10  ? '#bdd7e7' :
+                      '#eff3ff' ;
   } else {
-    return d > 500 ? '#08519c' :
-           d > 200 ? '#3182bd' :
-           d > 100 ? '#6baed6' :
-           d > 50  ? '#bdd7e7' :
-           d > 0  ? '#eff3ff' :
+    return d > 499 ? '#54278f' :
+           d > 199 ? '#756bb1' :
+           d > 99 ? '#9e9ac8' :
+           d > 49  ? '#cbc9e2' :
+           d > 0  ? '#f2f0f7' :
                      'white' ;
   }
 }
