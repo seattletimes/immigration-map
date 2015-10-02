@@ -9,7 +9,7 @@ var ich = require("icanhaz");
 var data = require("./foreignBorn.geo.json");
 
 var countryLookup = "PercentForeignBorn";
-var country = "Overall";
+var country = "Overall immigrant population";
 
 var mapElement = document.querySelector("leaflet-map");
 var L = mapElement.leaflet;
@@ -95,12 +95,20 @@ var geojson = L.geoJson(data, {
   onEachFeature: onEachFeature
 }).addTo(map);
 
+document.querySelector(".key").innerHTML = require("./_overallLegend.html");
+
 Array.prototype.slice.call(document.querySelectorAll('.tab')).forEach(function(tab) {
   tab.addEventListener("click", function() {
     if (document.querySelector(".selected")) document.querySelector(".selected").classList.remove("selected");
     tab.classList.add("selected");
     country = tab.innerHTML;
-    countryLookup = country == "Overall" ? "PercentForeignBorn" : tab.innerHTML.replace(" ", "");
+    if (country == "Overall immigrant population") {
+      document.querySelector(".key").innerHTML = require("./_overallLegend.html");
+      countryLookup = "PercentForeignBorn";
+    } else {
+      document.querySelector(".key").innerHTML = require("./_countryLegend.html");
+      countryLookup = tab.innerHTML.replace(" ", "");
+    }
     geojson.setStyle(style);
     map.closePopup();
   })
