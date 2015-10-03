@@ -9,7 +9,7 @@ var ich = require("icanhaz");
 var data = require("./foreignBorn.geo.json");
 
 var countryLookup = "PercentForeignBorn";
-var country = "Overall immigrant population";
+var country = "Overall foreign-born population";
 
 var mapElement = document.querySelector("leaflet-map");
 var L = mapElement.leaflet;
@@ -21,6 +21,10 @@ var focused = false;
 
 var popupTemplate = require("./_popupTemplate.html");
 ich.addTemplate("popupTemplate", popupTemplate);
+var overallLegend = require("./_overallLegend.html");
+ich.addTemplate("overallLegend", overallLegend);
+var countryLegend = require("./_countryLegend.html");
+ich.addTemplate("countryLegend", countryLegend);
 
 var onEachFeature = function(feature, layer) {
   layer.bindPopup(ich.popupTemplate({
@@ -30,9 +34,8 @@ var onEachFeature = function(feature, layer) {
   layer.on({
     popupopen: function(e) {
       e.popup.setContent(ich.popupTemplate({
-        country: country,
-        number: commafy(feature.properties[countryLookup]),
-        s: feature.properties[countryLookup] == 1 ? "": "s"
+        country: country == "Overall foreign-born population" ? "Overall" : country,
+        number: commafy(feature.properties[countryLookup])
       }));
       focused = layer;
       layer.setStyle({ weight: 2, fillOpacity: 1, color: '#e08214'});
@@ -95,18 +98,23 @@ var geojson = L.geoJson(data, {
   onEachFeature: onEachFeature
 }).addTo(map);
 
-document.querySelector(".key").innerHTML = require("./_overallLegend.html");
+document.querySelector(".key").innerHTML = ich.overallLegend();
 
 Array.prototype.slice.call(document.querySelectorAll('.tab')).forEach(function(tab) {
   tab.addEventListener("click", function() {
     if (document.querySelector(".selected")) document.querySelector(".selected").classList.remove("selected");
     tab.classList.add("selected");
     country = tab.innerHTML;
-    if (country == "Overall immigrant population") {
-      document.querySelector(".key").innerHTML = require("./_overallLegend.html");
+    if (country == "Overall foreign-born population") {
+      document.querySelector(".key").innerHTML = ich.overallLegend();
       countryLookup = "PercentForeignBorn";
     } else {
-      document.querySelector(".key").innerHTML = require("./_countryLegend.html");
+      if (country == "Middle East" || country == "Philippines") {
+        var countryLabel = "the " + country;
+      } else {
+        var countryLabel = country;
+      }
+      document.querySelector(".key").innerHTML = ich.countryLegend({country: countryLabel});
       countryLookup = tab.innerHTML.replace(" ", "");
     }
     geojson.setStyle(style);

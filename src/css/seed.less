@@ -23,7 +23,7 @@ body {
 }
 
 @aspect-ratio: 7/10;
-@legend-length: 6;
+@legend-length: 5;
 
 .title {
   font-weight: bold;
@@ -47,6 +47,10 @@ body {
 
 .flex-container {
   .display-flex();
+
+  @media @tablet {
+    display: block;
+  }
 }
 
 .aspect-ratio-outer {
@@ -56,7 +60,7 @@ body {
 
   @media @mobile {
     width: 100%;
-    padding: 0 30px;
+    padding: 0;
   }
 
   .aspect-ratio-inner {
@@ -90,6 +94,10 @@ body {
       background: @df-dark-gray;
       color: white;
     }
+  }
+
+  @media @mobile {
+    padding: 0;
   }
 }
 

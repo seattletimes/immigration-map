@@ -16,6 +16,10 @@ aside.legend {
     left: 0;
   }
 
+  @media @mobile {
+    padding: 6px 0;
+  }
+
   h1 {
     margin: 5px 0 8px 0;
     padding: 0;
@@ -52,24 +56,9 @@ aside.legend {
       @media @tablet {
         display: block;
         width: auto;
+        margin-right: 0px;
       }
     }
-  }
-
-  .person {
-    background-color: #f05a22;
-  }
-
-    .place {
-    background-color: #008fb5;
-  }
-
-    .event {
-    background-color: #5eb546;
-  }
-
-    .other {
-    background-color: gray;
   }
 
   cite.source {
@@ -83,15 +72,36 @@ aside.legend {
 
     .credit {
       font-style: normal;
-      text-align: left;
       font-size: 95%;
       text-transform: uppercase;
       display: block;
+    }
 
-      @media @tablet {
-        display:inline-block;
-        float: right;
-      }
+    @media @mobile {
+      display: none;
+    }
+  }
+}
+
+.mobile-legend {
+  cite.source {
+    display: none;
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+    clear: both;
+    margin-top: 10px;
+    text-decoration: italic;
+
+    .credit {
+      font-style: normal;
+      font-size: 95%;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    @media @mobile {
+      display: block;
     }
   }
 }
