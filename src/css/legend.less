@@ -8,12 +8,14 @@ aside.legend {
   background: white;
   background: rgba(255,255,255,0.9);
   border-radius: 5px;
+  max-width: 222px;
 
   @media @tablet {
     position: relative;
     width: 100%;
     bottom: 0;
     left: 0;
+    max-width: 100%;
   }
 
   @media @mobile {
@@ -21,10 +23,16 @@ aside.legend {
   }
 
   h1 {
-    margin: 5px 0 8px 0;
+    margin: 5px 0;
     padding: 0;
     text-align: left;
     font-size: 14px;
+  }
+
+  .total {
+    font-size: 13px;
+    font-style: italic;
+    padding-bottom: 3px;
   }
 
   ul.scale {

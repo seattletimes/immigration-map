@@ -19,6 +19,21 @@ map.scrollWheelZoom.disable();
 
 var focused = false;
 
+var totalLookup = {
+  "Mexico and Central America": "63,893",
+  "China": "52,191",
+  "Eastern Africa": "40,617",
+  "India": "36,077",
+  "Eastern Europe": "35,749",
+  "Vietnam": "30,476",
+  "Philippines": "30,073",
+  "Korea": "19,651",
+  "Canada": "18,551",
+  "Middle East": "12,080",
+  "Taiwan": "9,292",
+  "Japan": "8,944"
+};
+
 var popupTemplate = require("./_popupTemplate.html");
 ich.addTemplate("popupTemplate", popupTemplate);
 var overallLegend = require("./_overallLegend.html");
@@ -114,8 +129,12 @@ Array.prototype.slice.call(document.querySelectorAll('.tab')).forEach(function(t
       } else {
         var countryLabel = country;
       }
-      document.querySelector(".key").innerHTML = ich.countryLegend({country: countryLabel});
-      countryLookup = tab.innerHTML.replace(" ", "");
+      document.querySelector(".key").innerHTML = ich.countryLegend({
+        country: countryLabel,
+        total: totalLookup[country]
+      });
+      countryLookup = tab.innerHTML.split(' ').join('');
+      console.log(countryLookup)
     }
     geojson.setStyle(style);
     map.closePopup();
