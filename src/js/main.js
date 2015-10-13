@@ -6,7 +6,7 @@ require("component-responsive-frame/child");
 require("component-leaflet-map");
 
 var ich = require("icanhaz");
-var data = require("./foreignBorn.geo.json");
+var data = require("./newForeignBorn.geo.json");
 
 var countryLookup = "PercentForeignBorn";
 var country = "Overall foreign-born population";
@@ -45,11 +45,13 @@ var onEachFeature = function(feature, layer) {
   layer.bindPopup(ich.popupTemplate({
     country: country,
     number: feature.properties[countryLookup]
+
   }));
   layer.on({
     popupopen: function(e) {
       e.popup.setContent(ich.popupTemplate({
         country: country == "Overall foreign-born population" ? "Overall" : country,
+        total: commafy(feature.properties["total"+countryLookup]),
         number: commafy(feature.properties[countryLookup])
       }));
       focused = layer;
@@ -73,7 +75,6 @@ map.on("popupclose", function() {
 });
 
 function commafy( num ) {
-  console.log(num)
   if (num.length >= 4) {
     num = num.replace(/(\d)(?=(\d{3})+$)/g, '$1,');
   }
@@ -89,10 +90,10 @@ function getColor(d) {
            d >= 10  ? '#bdd7e7' :
                       '#eff3ff' ;
   } else {
-    return d > 499 ? '#54278f' :
-           d > 199 ? '#756bb1' :
-           d > 99 ? '#9e9ac8' :
-           d > 49  ? '#cbc9e2' :
+    return d > 500 ? '#54278f' :
+           d > 200 ? '#756bb1' :
+           d > 100 ? '#9e9ac8' :
+           d > 50  ? '#cbc9e2' :
            d > 0  ? '#f2f0f7' :
                      'white' ;
   }
@@ -134,7 +135,6 @@ Array.prototype.slice.call(document.querySelectorAll('.tab')).forEach(function(t
         total: totalLookup[country]
       });
       countryLookup = tab.innerHTML.split(' ').join('');
-      console.log(countryLookup)
     }
     geojson.setStyle(style);
     map.closePopup();
