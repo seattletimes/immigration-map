@@ -1,5 +1,10 @@
 <div class="popuptext">
   <div class="country-label">{{country}}</div>
-  <div>{{number}} per square mile</div>
-  <div>({{total}} total)</div>
+  <div>{{number}}
+    {{^total}} foreign-born{{/total}}
+    {{#total}} per square mile{{/total}}
+  </div>
+  {{#total}}
+    <div>({{total}} total)</div>
+  {{/total}}
 </div>

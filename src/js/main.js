@@ -75,6 +75,7 @@ map.on("popupclose", function() {
 });
 
 function commafy( num ) {
+  if (!num) return;
   if (num.length >= 4) {
     num = num.replace(/(\d)(?=(\d{3})+$)/g, '$1,');
   }
